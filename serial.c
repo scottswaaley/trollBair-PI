@@ -10,7 +10,7 @@
 
 unsigned int camoptions;
 
-void polluart(void) { // check for serial commands. Slightly crude but simple
+char polluart(void) { // check for serial commands. Slightly crude but simple
 
     unsigned int i, pchange, x, y, outptr;
     unsigned char c;
@@ -31,7 +31,21 @@ void polluart(void) { // check for serial commands. Slightly crude but simple
 
     if (rxptr == 0) return;
 
-    switch (rxbuf[0]) {
+    int j;
+    if(rxptr > 0) {
+        //for(j = 0; rxbuf[j] !=0;j++) currentText[j] = 32; // 32 = space in ansii
+        for(j = 0; j < rxptr ;j++) {
+            currentText[j] = rxbuf[j]; // maybe just make it equal the whole rx buffer?
+        }
+        currentText[j] = 0;
+        return 1; // indicate success
+    }
+//    for(j = 0; j < sizeof(currentText) ;j++) {
+//        currentText[j] = rxbuf[j]; // maybe just make it equal the whole rx buffer?
+//    }
+    
+    u2txbyte(0xFF); // signal complete
+    /*switch (rxbuf[0]) {
 
 
         case 0x10:// 0x10 <adr> <value>  set camera register. returns 0x55 
@@ -115,11 +129,24 @@ rxptr = 0;
             u2txbyte(butpress);
             u2txword(battlevel);
             break;            
-
+        
+        case 0x40: // take in data
+            if(rxptr!=1) break;
+            rxptr=0;
+            
+            //char textInput[228] = ""; // max # of characters on screen
+            int i;
+            for(i = 0; i < sizeof(currentText);i++) {
+                currentText[i] = (char) rxbuf[i]; // maybe just make it equal the whole rx buffer?
+            }
+            
+            u2txbyte(0x99); // signal complete
+           
+            break;        
             
             
             
-    }//switch
+    }//switch*/
     if (rxptr == 0) powerdowntimer = 0; // reset timer on good command
 }
 #endif

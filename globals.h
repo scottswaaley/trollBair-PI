@@ -3,6 +3,12 @@
 
 //_____________________________________________________________________ camera status
 
+//Scott's stuff
+unsigned char currentText[230];
+
+
+// ****
+
 extern volatile unsigned char cam_started; // set at start of first active line, cleared by app code
 extern volatile unsigned char cam_busy; // set on vsync, cleared when all lines captured
 extern volatile unsigned char cam_newframe; /// set when all lines captured, cleared by app code
@@ -128,7 +134,7 @@ void setupints(void); // set up interrupts
 void oledcmd(unsigned int); // Send byte to OLED - b8 set for command, clear for data
 void oled_init(void); // initialise oled
 void acc_read(void); // read accelerometer
-void polluart(void); // poll for serial commands
+char polluart(void); // poll for serial commands
 void enterboot(void); //enter bootloader
 void readbatt(void); // read battery voltage
 unsigned char readcamreg(unsigned char c); // read camera register
